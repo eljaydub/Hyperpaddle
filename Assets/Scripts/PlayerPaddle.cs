@@ -5,9 +5,13 @@ public class PlayerPaddle : MonoBehaviour {
 
 	public Camera myCamera;
 	private float cameraToPaddleDistance;
+	public ScoreKeeper scoreKeeper;
+	private CameraControl cameraControl;
+			
 	//Use this for initialization
 	void Start () {
 		cameraToPaddleDistance = transform.position.z - myCamera.transform.position.z;
+		cameraControl = myCamera.GetComponent<CameraControl>();
 	}
 	
 	void OnMouseDrag() {
@@ -29,5 +33,11 @@ public class PlayerPaddle : MonoBehaviour {
 		moveTo.y = Mathf.Clamp(worldPos.y, -7.5f, 7.5f);
 		moveTo.z = transform.position.z;
 		transform.position = moveTo;
+		
+		cameraControl.ShiftAroundPaddle(transform.position);
+	}
+	
+	void OnCollisionEnter(Collision coll) {
+		scoreKeeper.Add(1);
 	}
 }
